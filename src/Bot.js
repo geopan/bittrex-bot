@@ -9,12 +9,14 @@ class Bot {
     this.key = apikey;
     this.secret = apisecret;
     this.uri = new URL('https://bittrex.com');
-    this.hash = crypto.createHmac('sha512', this.secret);
     return this;
   }
 
   sign(uri) {
-    return this.hash.update(uri).digest('hex');
+    return crypto
+      .createHmac('sha512', this.secret)
+      .update(uri)
+      .digest('hex');
   }
 
   request(options) {

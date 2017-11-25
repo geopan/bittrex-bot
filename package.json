@@ -2,14 +2,18 @@
   "name": "bittrex-bot",
   "version": "1.0.0",
   "description": "A bot to trade on bittrex",
+  "repository": {
+    "git": "https://github.com/geopan/bittrex-bot.git"
+  },
   "main": "index.js",
   "scripts": {
     "test": "mocha ./src/*.spec.js"
   },
-  "keywords": ["bittrex", "bot", "trade"],
+  "keywords": ["bittrex", "bot", "trading"],
   "author": "geopan",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^4.0.0",
     "lodash": "^4.17.4",
     "request": "^2.83.0",
     "request-promise": "^4.2.2"
@@ -22,5 +26,7 @@
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.5.1"
   },
-  "engines": { "node": ">=8" }
+  "engines": {
+    "node": ">=8"
+  }
 }
