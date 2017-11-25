@@ -1,6 +1,9 @@
 const { expect, should } = require('chai');
+const Bot = require('./Bot');
 
 describe('Bot', () => {
+  before(() => {});
+
   describe('#constructor', () => {
     it('should construct a new Bot');
   });
