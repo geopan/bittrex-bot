@@ -29,5 +29,8 @@
   },
   "engines": {
     "node": ">=8"
+  },
+  "nyc": {
+    "exclude": ["**/*.spec.js"]
   }
 }

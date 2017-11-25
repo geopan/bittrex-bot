@@ -33,7 +33,7 @@ class Bot {
     });
   }
 
-  getBalance(currency = 'BTC') {
+  getBalance(currency = 'btc') {
     const options = {
       currency,
       apikey: this.key,
@@ -59,13 +59,13 @@ class Bot {
     return this.request(options);
   }
 
-  getMarketSummary(currency) {
+  getMarketSummary(currency = 'eth') {
     const market = `btc-${currency}`;
     this.uri.pathname = '/api/v1.1/public/getmarketsummary';
     return this.request({ market });
   }
 
-  getOrderBook(currency, type = 'both') {
+  getOrderBook(currency = 'ETH', type = 'both') {
     this.uri.pathname = '/api/v1.1/public/getorderbook';
     const options = {
       market: `BTC-${currency}`,
@@ -81,57 +81,48 @@ class Bot {
   // period is the number of units to be analyzed
   // valid values for periods are 'oneMin', 'fiveMin', 'thirtyMin', 'hour', 'week', 'day', and 'month'
   // unit is the number of periods to be returned
-  async getTicks(currency, unit) {
+  getTicks(currency, unit) {
     this.uri.pathname = '/api/v2.0//pub/market/GetTicks';
     const options = {
       marketName: `BTC-${currency}`,
       tickInterval: unit,
     };
-    try {
-      const data = await this.request(options);
-      const { success, message, result } = data;
-      return success ? data.result : { success, message };
-    } catch (err) {
-      throw err;
-    }
+    return this.request(options);
   }
 
   // Returns closing prices within a specified time frame for a coin pair
-  async getClosingPrices(currency, period = 5, unit = 'thirtyMin') {
+  async getClosingPrices(currency = 'ETH', period = 5, unit = 'thirtyMin') {
     try {
-      const history = await this.getTicks(currency, unit);
-      return _.takeRight(history, period).map(e => e.C);
+      const ticks = await this.getTicks(currency, unit);
+      const { result = [] } = ticks;
+      return _.takeRight(result, period).map(e => e.C);
     } catch (err) {
       throw err;
     }
   }
 
   // Returns the Simple Moving Average for a coin pair
-  async calculateSMA(currency, period, unit) {
-    const closing = await getClosingPrices(currency, period, unit);
+  async calculateSMA(currency = 'ETH', period = 5, unit = 'hour') {
+    const closing = await this.getClosingPrices(currency, period, unit);
     const total_closing = closing.length > 0 ? closing.reduce((total, x) => total + x) : 0;
     return total_closing / period;
   }
 
   // Returns the Exponential Moving Average for a coin pair
-  async calculateEMA(coin_pair, period, unit) {
-    const closing_prices = await getClosingPrices(coin_pair, period, unit);
-    const previous_EMA = await calculateSMA(coin_pair, period, unit);
+  async calculateEMA(currency = 'ETH', period = 5, unit = 'hour') {
+    const closing_prices = await this.getClosingPrices(currency, period, unit);
+    const previous_EMA = await this.calculateSMA(currency, period, unit);
     const constant = 2 / (period + 1);
     return closing_prices[-1] * (2 / (1 + period)) + previous_EMA * (1 - 2 / (1 + period));
   }
 
-  async calculateRSI(currency, period, unit) {
+  async calculateRSI(currency = 'ETH', period = 5, unit = 'hour') {
     // Calculates the Relative Strength Index for a coin_pair
     // If the returned value is above 70, it's overbought (SELL IT!)
     // If the returned value is below 30, it's oversold (BUY IT!)
 
     try {
-      console.time('getClosingPrices');
       const closing_prices = await this.getClosingPrices(currency, period * 3, unit);
-      console.timeEnd('getClosingPrices');
-
-      console.time('calculateRSI');
 
       let count = 0;
       const change = [];
@@ -173,14 +164,13 @@ class Bot {
 
       const rs = newAvgGain / newAvgLoss;
       const newRS = 100 - 100 / (1 + rs);
-      console.timeEnd('calculateRSI');
       return newRS;
     } catch (err) {
       throw err;
     }
   }
 
-  async calculateBaseLine(currency, unit) {
+  async calculateBaseLine(currency = 'ETH', unit = 'hour') {
     // Calculates (26 period high + 26 period low) / 2
     // Also known as the "Kijun-sen" line
 
@@ -190,7 +180,7 @@ class Bot {
     return (period_high + period_low) / 2;
   }
 
-  async calculateConversionLine(currency, unit) {
+  async calculateConversionLine(currency = 'ETH', unit = 'hour') {
     // Calculates (9 period high + 9 period low) / 2
     // Also known as the "Tenkan-sen" line
 
@@ -200,26 +190,26 @@ class Bot {
     return (period_high + period_low) / 2;
   }
 
-  async calculateLeadingSpanA(currency, unit) {
+  async calculateLeadingSpanA(currency = 'ETH', unit = 'hour') {
     // Calculates (Conversion Line + Base Line) / 2
     // Also known as the "Senkou Span A" line
 
-    const base_line = await calculateBaseLine(currency, unit);
+    const base_line = await this.calculateBaseLine(currency, unit);
     const conversion_line = await this.calculateConversionLine(currency, unit);
     return (base_line + conversion_line) / 2;
   }
 
-  async calculateLeadingSpanB(currency, unit) {
+  async calculateLeadingSpanB(currency = 'ETH', unit = 'hour') {
     // Calculates (52 period high + 52 period low) / 2
     // Also known as the "Senkou Span B" line
 
-    const constclosing_prices = await this.getClosingPrices(currency, 52, unit);
-    const period_high = max(closing_prices) || 0;
-    const period_low = min(closing_prices) || 0;
+    const closing_prices = await this.getClosingPrices(currency, 52, unit);
+    const period_high = _.max(closing_prices) || 0;
+    const period_low = _.min(closing_prices) || 0;
     return (period_high + period_low) / 2;
   }
 
-  async findBreakout(currency, period, unit) {
+  async findBreakout(currency = 'ETH', period = 5, unit = 'hour') {
     // Finds breakout based on how close the High was to Closing and Low to Opening
 
     let hit = 0;
