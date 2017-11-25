@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha ./src/*.spec.js",
-    "cover": "nyc npm test"
+    "cover": "nyc npm test --report lcovonly -- -R spec"
   },
   "keywords": ["bittrex", "bot", "trading"],
   "author": "geopan",
