@@ -4,15 +4,13 @@
   "description": "A bot to trade on bittrex",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./**/*.spec.js"
+    "test": "mocha ./src/*.spec.js"
   },
   "keywords": ["bittrex", "bot", "trade"],
   "author": "geopan",
   "license": "ISC",
   "dependencies": {
-    "cloudscraper": "^1.4.1",
     "lodash": "^4.17.4",
-    "node-bittrex-api": "^0.7.8",
     "request": "^2.83.0",
     "request-promise": "^4.2.2"
   },
@@ -22,8 +20,7 @@
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
-    "eslint-plugin-react": "^7.5.1",
-    "mocha": "^4.0.1",
-    "nyc": "^11.3.0"
-  }
+    "eslint-plugin-react": "^7.5.1"
+  },
+  "engines": { "node": ">=8" }
 }
