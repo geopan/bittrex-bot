@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const crypto = require('crypto');
-const { URL, URLSearchParams } = require('url');
+const { URL } = require('url');
 const querystring = require('querystring');
 const rp = require('request-promise');
 
@@ -112,8 +112,8 @@ class Bot {
   async calculateEMA(currency = 'ETH', period = 5, unit = 'hour') {
     const closing_prices = await this.getClosingPrices(currency, period, unit);
     const previous_EMA = await this.calculateSMA(currency, period, unit);
-    const constant = 2 / (period + 1);
-    return closing_prices[-1] * (2 / (1 + period)) + previous_EMA * (1 - 2 / (1 + period));
+    const c = 2 / (period + 1);
+    return closing_prices[-1] * c + previous_EMA * (1 - c);
   }
 
   async calculateRSI(currency = 'ETH', period = 5, unit = 'hour') {
@@ -129,11 +129,11 @@ class Bot {
 
       // Calculating price changes
       for (const i of closing_prices) {
-        if (count != 0) {
+        if (count !== 0) {
           change.push(i - closing_prices[count - 1]);
         }
         count += 1;
-        if (count == 15) {
+        if (count === 15) {
           break;
         }
       }
@@ -216,7 +216,7 @@ class Bot {
     const historical_data = await this.getTicks(currency, unit);
     const sample = _.takeRight(historical_data, period);
     for (const i of sample) {
-      if (i.C == i.H && i.O == i.L) hit += 1;
+      if (i.C === i.H && i.O === i.L) hit += 1;
     }
     return hit / period >= 0.75;
   }

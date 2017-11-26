@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - "8"
 before_script:
-  - npm install -g mocha nyc codecov
+  - npm install -g mocha nyc nsp
 script:
   - npm run cover
-  - codecov
+  - nsp
