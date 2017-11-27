@@ -34,34 +34,49 @@ class Bot {
   }
 
   getBalance(currency = 'btc') {
+    this.uri.pathname = '/api/v1.1/account/getbalance';
     const options = {
       currency,
       apikey: this.key,
       nonce: new Date().getTime(),
     };
-
-    this.uri.pathname = '/api/v1.1/account/getbalance';
-
     return this.request(options);
   }
 
+  // Used to place a buy order in a specific market.
   buy({ coin, quantity, rate }) {
+    this.uri.pathname = '/api/v1.1/market/buylimit';
     const options = {
       market: `BTC-${coin}`,
       quantity,
       rate,
-      apikey: this.key,
-      nonce: new Date().getTime(),
     };
+    return this.request(options);
+  }
 
-    this.uri.pathname = '/api/v1.1/market/buylimit';
+  // Used to place an sell order in a specific market
+  sell({ coin, quantity, rate }) {
+    this.uri.pathname = '/api/v1.1/market/selllimit';
+    const options = {
+      market: `BTC-${coin}`,
+      quantity,
+      rate,
+    };
+    return this.request(options);
+  }
 
+  cancel(uuid) {
+    this.uri.pathname = '/api/v1.1/market/cancel';
+    const options = {
+      uuid,
+      apikey: this.key,
+    };
     return this.request(options);
   }
 
   getMarketSummary(currency = 'eth') {
-    const market = `btc-${currency}`;
     this.uri.pathname = '/api/v1.1/public/getmarketsummary';
+    const market = `btc-${currency}`;
     return this.request({ market });
   }
 
@@ -70,6 +85,15 @@ class Bot {
     const options = {
       market: `BTC-${currency}`,
       type,
+    };
+    return this.request(options);
+  }
+
+  getOpenOrders(currency = 'ETH') {
+    this.uri.pathname = '/api/v1.1/public/getopenorders';
+    const options = {
+      market: `BTC-${currency}`,
+      apikey: this.key,
     };
     return this.request(options);
   }

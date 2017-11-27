@@ -36,6 +36,18 @@ describe('Bot', function () {
   describe('#buy', () => {
     it('should buy');
   });
+  describe('#sell', () => {
+    it('should sell');
+  });
+  describe('#cancel', () => {
+    it('should cancel');
+  });
+  describe('#getOpenOrders', () => {
+    it('should return open orders', async () => {
+      const res = await bot.getOpenOrders();
+      expect(res).to.haveOwnProperty('success', true);
+    });
+  });
   describe('#getMarketSummary', () => {
     it('should return market summary from bittrex', async () => {
       const res = await bot.getMarketSummary();
