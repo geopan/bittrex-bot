@@ -4,5 +4,5 @@ node_js:
 before_script:
   - npm install -g mocha nyc nsp
 script:
-  - npm run cover
   - nsp check
+  - npm run coveralls
