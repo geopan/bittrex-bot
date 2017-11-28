@@ -27,7 +27,7 @@ describe('Bot', function () {
       expect(res).to.haveOwnProperty('success', true);
     });
   });
-  describe('#getBalance', () => {
+  describe.skip('#getBalance', () => {
     it('should return own balance', async () => {
       const res = await bot.getBalance();
       expect(res).to.haveOwnProperty('success', true);
@@ -42,7 +42,7 @@ describe('Bot', function () {
   describe('#cancel', () => {
     it('should cancel');
   });
-  describe('#getOpenOrders', () => {
+  describe.skip('#getOpenOrders', () => {
     it('should return open orders', async () => {
       const res = await bot.getOpenOrders();
       expect(res).to.haveOwnProperty('success', true);

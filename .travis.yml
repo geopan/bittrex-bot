@@ -6,3 +6,4 @@ before_script:
 script:
   - npm run cover
   - nsp
+  - npm run coveralls

@@ -8,7 +8,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha ./src/*.spec.js",
-    "cover": "nyc npm test --report lcovonly -- -R spec"
+    "cover": "nyc mocha ./src/*.spec.js",
+    "coveralls": "cat ./nyc_output/lcov.info | ./node_modules/coveralls/bin/coveralls.js -v"
   },
   "keywords": ["bittrex", "bot", "trading"],
   "author": "geopan",
