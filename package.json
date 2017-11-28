@@ -9,7 +9,7 @@
   "scripts": {
     "test": "mocha ./src/*.spec.js",
     "cover": "nyc npm test",
-    "coveralls": "nyc -R lvoc npm test | ./node_modules/coveralls/bin/coveralls.js -v"
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "keywords": ["bittrex", "bot", "trading"],
   "author": "geopan",
