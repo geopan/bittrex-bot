@@ -90,10 +90,11 @@ class Bot {
   }
 
   getOpenOrders(currency = 'ETH') {
-    this.uri.pathname = '/api/v1.1/public/getopenorders';
+    this.uri.pathname = '/api/v1.1/market/getopenorders';
     const options = {
       market: `BTC-${currency}`,
       apikey: this.key,
+      nonce: new Date().getTime(),
     };
     return this.request(options);
   }
@@ -116,13 +117,9 @@ class Bot {
 
   // Returns closing prices within a specified time frame for a coin pair
   async getClosingPrices(currency = 'ETH', period = 5, unit = 'thirtyMin') {
-    try {
-      const ticks = await this.getTicks(currency, unit);
-      const { result = [] } = ticks;
-      return _.takeRight(result, period).map(e => e.C);
-    } catch (err) {
-      throw err;
-    }
+    const ticks = await this.getTicks(currency, unit);
+    const { result = [] } = ticks;
+    return _.takeRight(result, period).map(e => e.C);
   }
 
   // Returns the Simple Moving Average for a coin pair
