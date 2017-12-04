@@ -1,3 +1,3 @@
-const Bot = require('./src');
+const bot = require('./src');
 
-module.exports = Bot;
+module.exports = bot;
