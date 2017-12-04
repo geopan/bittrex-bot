@@ -1,1 +1,3 @@
-require('./src');
+const Bot = require('./src');
+
+module.exports = Bot;
