@@ -1,17 +1,11 @@
 const _ = require('lodash');
 const crypto = require('crypto');
-const {
-  URL
-} = require('url');
+const { URL } = require('url');
 const querystring = require('querystring');
 const rp = require('request-promise');
 
 class Bot {
-  constructor({
-    uri = 'https://bittrex.com',
-    apikey = '',
-    apisecret = ''
-  }) {
+  constructor({ uri = 'https://bittrex.com', apikey = '', apisecret = '' }) {
     this.key = apikey;
     this.secret = apisecret;
     this.uri = new URL(uri);
@@ -34,14 +28,11 @@ class Bot {
 
     return rp.get({
       uri,
-      headers: {
-        apisign: this.sign(uri)
-      },
+      headers: { apisign: this.sign(uri) },
       json: true,
     });
   }
 
-  // Returns list of account balances
   getBalances() {
     this.uri.pathname = '/api/v1.1/account/getbalances';
     return this.request();
@@ -58,11 +49,7 @@ class Bot {
   }
 
   // Used to place a buy order in a specific market.
-  buy({
-    coin,
-    quantity,
-    rate
-  }) {
+  buy({ coin, quantity, rate }) {
     this.uri.pathname = '/api/v1.1/market/buylimit';
     const options = {
       market: `BTC-${coin}`,
@@ -73,11 +60,7 @@ class Bot {
   }
 
   // Used to place an sell order in a specific market
-  sell({
-    coin,
-    quantity,
-    rate
-  }) {
+  sell({ coin, quantity, rate }) {
     this.uri.pathname = '/api/v1.1/market/selllimit';
     const options = {
       market: `BTC-${coin}`,
@@ -99,9 +82,7 @@ class Bot {
   getMarketSummary(currency = 'eth') {
     this.uri.pathname = '/api/v1.1/public/getmarketsummary';
     const market = `btc-${currency}`;
-    return this.request({
-      market
-    });
+    return this.request({ market });
   }
 
   getOrderBook(currency = 'ETH', type = 'both') {
@@ -142,9 +123,7 @@ class Bot {
   // Returns closing prices within a specified time frame for a coin pair
   async getClosingPrices(currency = 'ETH', period = 5, unit = 'thirtyMin') {
     const ticks = await this.getTicks(currency, unit);
-    const {
-      result = []
-    } = ticks;
+    const { result = [] } = ticks;
     return _.takeRight(result, period).map(e => e.C);
   }
 
