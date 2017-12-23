@@ -41,6 +41,7 @@ class Bot {
     });
   }
 
+  // Returns list of account balances
   getBalances() {
     this.uri.pathname = '/api/v1.1/account/getbalances';
     return this.request();
