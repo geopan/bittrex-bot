@@ -33,6 +33,11 @@ class Bot {
     });
   }
 
+  getBalances() {
+    this.uri.pathname = '/api/v1.1/account/getbalances';
+    return this.request();
+  }
+
   getBalance(currency = 'btc') {
     this.uri.pathname = '/api/v1.1/account/getbalance';
     const options = {
