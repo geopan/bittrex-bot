@@ -3,12 +3,14 @@ const crypto = require('crypto');
 const { URL } = require('url');
 const querystring = require('querystring');
 const rp = require('request-promise');
+const autoBind = require('auto-bind');
 
 class Bot {
   constructor({ uri = 'https://bittrex.com', apikey = '', apisecret = '' }) {
     this.key = apikey;
     this.secret = apisecret;
     this.uri = new URL(uri);
+    autoBind(this);
     return this;
   }
 
