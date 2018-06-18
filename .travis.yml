@@ -6,4 +6,3 @@ before_script:
 script:
   - npm run cover
   - npm run coveralls
-  - npm publish

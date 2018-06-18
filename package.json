@@ -1,6 +1,6 @@
 {
   "name": "bittrex-bot",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A bot to trade on bittrex",
   "repository": {
     "type": "git",

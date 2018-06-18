@@ -27,9 +27,8 @@ describe('Bot', function () {
     });
   });
   describe('#getBalance', () => {
-    it.only('should return own balance', async () => {
+    it('should return own balance', async () => {
       const res = await bot.getBalance();
-      console.log(res);
       expect(res).to.haveOwnProperty('success', true);
     });
   });
