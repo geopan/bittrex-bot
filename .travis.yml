@@ -2,8 +2,8 @@ language: node_js
 node_js:
   - "8"
 before_script:
-  - npm install -g mocha nyc nsp coveralls
+  - npm install -g mocha nyc coveralls
 script:
-  - nsp check
   - npm run cover
   - npm run coveralls
+  - npm publish

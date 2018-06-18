@@ -2,7 +2,7 @@ const _ = require('lodash');
 const crypto = require('crypto');
 const { URL } = require('url');
 const querystring = require('querystring');
-const rp = require('request-promise');
+const axios = require('axios');
 
 class Bot {
   constructor({ uri = 'https://bittrex.com', apikey = '', apisecret = '' }) {
@@ -19,21 +19,21 @@ class Bot {
       .digest('hex');
   }
 
-  request(options) {
+  async request(options) {
     let uri = this.uri.toString();
     if (options) {
       const q = querystring.stringify(options);
       uri += `?${q}`;
     }
 
-    return rp.get({
-      uri,
+    const { data } = await axios.get(uri, {
       headers: { apisign: this.sign(uri) },
-      json: true,
+      responseType: 'json',
     });
+    return data;
   }
 
-  getBalance(currency = 'btc') {
+  async getBalance(currency = 'btc') {
     this.uri.pathname = '/api/v1.1/account/getbalance';
     const options = {
       currency,
@@ -44,7 +44,7 @@ class Bot {
   }
 
   // Used to place a buy order in a specific market.
-  buy({ coin, quantity, rate }) {
+  async buy({ coin, quantity, rate }) {
     this.uri.pathname = '/api/v1.1/market/buylimit';
     const options = {
       market: `BTC-${coin}`,
@@ -55,7 +55,7 @@ class Bot {
   }
 
   // Used to place an sell order in a specific market
-  sell({ coin, quantity, rate }) {
+  async sell({ coin, quantity, rate }) {
     this.uri.pathname = '/api/v1.1/market/selllimit';
     const options = {
       market: `BTC-${coin}`,
@@ -65,7 +65,7 @@ class Bot {
     return this.request(options);
   }
 
-  cancel(uuid) {
+  async cancel(uuid) {
     this.uri.pathname = '/api/v1.1/market/cancel';
     const options = {
       uuid,
@@ -74,13 +74,13 @@ class Bot {
     return this.request(options);
   }
 
-  getMarketSummary(currency = 'eth') {
+  async getMarketSummary(currency = 'eth') {
     this.uri.pathname = '/api/v1.1/public/getmarketsummary';
     const market = `btc-${currency}`;
     return this.request({ market });
   }
 
-  getOrderBook(currency = 'ETH', type = 'both') {
+  async getOrderBook(currency = 'ETH', type = 'both') {
     this.uri.pathname = '/api/v1.1/public/getorderbook';
     const options = {
       market: `BTC-${currency}`,
@@ -89,7 +89,7 @@ class Bot {
     return this.request(options);
   }
 
-  getOpenOrders(currency = 'ETH') {
+  async getOpenOrders(currency = 'ETH') {
     this.uri.pathname = '/api/v1.1/market/getopenorders';
     const options = {
       market: `BTC-${currency}`,
@@ -106,7 +106,7 @@ class Bot {
   // period is the number of units to be analyzed
   // valid values for periods are 'oneMin', 'fiveMin', 'thirtyMin', 'hour', 'week', 'day', and 'month'
   // unit is the number of periods to be returned
-  getTicks(currency, unit) {
+  async getTicks(currency, unit) {
     this.uri.pathname = '/api/v2.0//pub/market/GetTicks';
     const options = {
       marketName: `BTC-${currency}`,

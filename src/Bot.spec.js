@@ -1,5 +1,4 @@
-require('dotenv').config();
-const { expect, should } = require('chai');
+const { expect } = require('chai');
 const Bot = require('./Bot');
 
 let bot;
@@ -28,8 +27,9 @@ describe('Bot', function () {
     });
   });
   describe('#getBalance', () => {
-    it('should return own balance', async () => {
+    it.only('should return own balance', async () => {
       const res = await bot.getBalance();
+      console.log(res);
       expect(res).to.haveOwnProperty('success', true);
     });
   });

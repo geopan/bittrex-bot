@@ -12,28 +12,41 @@
     "cover": "nyc npm test",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
-  "keywords": ["bittrex", "bot", "trading"],
+  "keywords": [
+    "bittrex",
+    "bot",
+    "trading"
+  ],
   "author": "geopan",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^4.17.4",
-    "request": "^2.83.0",
-    "request-promise": "^4.2.2"
+    "axios": "^0.18.0",
+    "lodash": "^4.17.10"
   },
   "devDependencies": {
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
-    "eslint": "^4.11.0",
     "dotenv": "^4.0.0",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
-    "eslint-plugin-react": "^7.5.1"
+    "eslint-plugin-react": "^7.5.1",
+    "sinon": "^6.0.0"
   },
   "engines": {
     "node": ">=8"
   },
+  "eslintConfig": {
+    "extends": "airbnb",
+    "env": {
+      "node": true,
+      "mocha": true
+    }
+  },
   "nyc": {
-    "exclude": ["**/*.spec.js"]
+    "exclude": [
+      "**/*.spec.js"
+    ]
   }
 }
